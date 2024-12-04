@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import websocketClient from '../../utils/WebSocketClient';
 import EmojiPicker from 'emoji-picker-react';
-import Cookies from 'universal-cookie'; // Import thư viện universal-cookie
+import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
@@ -10,11 +10,11 @@ export const MessageInput = ({ sendMessage, uploadAttachment }) => {
   const [message, setMessage] = useState('');
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
-  const [isUploading, setIsUploading] = useState(false); // Trạng thái tải file
+  const [isUploading, setIsUploading] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleEmojiClick = (emojiObject) => {
-    setMessage((prev) => prev + emojiObject.emoji); // Thêm emoji vào nội dung tin nhắn
+    setMessage((prev) => prev + emojiObject.emoji);
   };
 
   const handleFileChange = (e) => {
@@ -26,7 +26,7 @@ export const MessageInput = ({ sendMessage, uploadAttachment }) => {
         return;
       }
       setFile(selectedFile);
-      setFilePreview(URL.createObjectURL(selectedFile)); // Tạo preview
+      setFilePreview(URL.createObjectURL(selectedFile));
     }
   };
 
@@ -40,10 +40,9 @@ export const MessageInput = ({ sendMessage, uploadAttachment }) => {
     if (file) {
       attachmentUrl = await uploadAttachment(file);
       setFile(null);
-      setFilePreview(null); // Xóa preview
+      setFilePreview(null);
     }
 
-    // Nếu có file, thêm URL của file vào nội dung tin nhắn
     const fullMessage = attachmentUrl || message;
 
     sendMessage(fullMessage.trim());
@@ -53,14 +52,12 @@ export const MessageInput = ({ sendMessage, uploadAttachment }) => {
 
   return (
     <div className="relative">
-      {/* Emoji Picker */}
       {showEmojiPicker && (
         <div className="absolute bottom-16 left-4 z-10 bg-white shadow-lg">
           <EmojiPicker onEmojiClick={handleEmojiClick} />
         </div>
       )}
 
-      {/* Input Form */}
       <form onSubmit={handleSubmit} className="flex items-center p-4 bg-gray-100 rounded-lg">
         <button
           type="button"
@@ -90,7 +87,6 @@ export const MessageInput = ({ sendMessage, uploadAttachment }) => {
         </button>
       </form>
 
-      {/* File Preview */}
       {filePreview && (
         <div className="mt-2">
           <p className="text-sm text-gray-600">File: {file.name}</p>
@@ -188,14 +184,13 @@ const ChatWindow = () => {
                   }`}
               >
                 {/\.(jpeg|jpg|gif|png)(\?.*)?$/i.test(msg.content) ? (
-                  // Hiển thị ảnh nếu nội dung là link ảnh
+
                   <img
                     src={msg.content}
                     alt="Attachment"
                     className="max-w-xs rounded-lg shadow-lg"
                   />
                 ) : (
-                  // Hiển thị nội dung bình thường nếu không phải link ảnh
                   <p>{msg.content}</p>
                 )}
               </div>
